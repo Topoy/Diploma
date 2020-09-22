@@ -19,13 +19,13 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="model.User"></mapping>
-        <mapping class="model.Post"></mapping>
-        <mapping class="model.PostComment"></mapping>
-        <mapping class="model.PostVote"></mapping>
-        <mapping class="model.StatusType"></mapping>
-        <mapping class="model.Tag"></mapping>
-        <mapping class="model.CaptchaCode"></mapping>
-        <mapping class="model.GlobalSettings"></mapping>
+        <mapping class="main.main.controller.controller.model.User"></mapping>
+        <mapping class="main.main.controller.controller.model.Post"></mapping>
+        <mapping class="main.main.controller.controller.model.PostComment"></mapping>
+        <mapping class="main.main.controller.controller.model.PostVote"></mapping>
+        <mapping class="main.main.controller.controller.model.StatusType"></mapping>
+        <mapping class="main.main.controller.controller.model.Tag"></mapping>
+        <mapping class="main.main.controller.controller.model.CaptchaCode"></mapping>
+        <mapping class="main.main.controller.controller.model.GlobalSettings"></mapping>
     </session-factory>
 </hibernate-configuration>
