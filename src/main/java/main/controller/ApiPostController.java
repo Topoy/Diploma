@@ -28,7 +28,19 @@ public class ApiPostController
     {
         System.out.println("offset = " + offset + "; limit = " + limit + "; query = " + query);
         return postService.searchPost(query);
-        //return "Hello!";
     }
 
+    @GetMapping(value = "api/post/byDate")
+    public PostResponse searchPostByDate(@RequestParam int offset, @RequestParam int limit, @RequestParam String date)
+    {
+        System.out.println("offset = " + offset + "; limit = " + limit + "; date = " + date);
+        return postService.searchPostByDate(date);
+    }
+
+    @GetMapping(value = "api/post/byTag")
+    public PostResponse searchPostByTag(@RequestParam int offset, @RequestParam int limit, @RequestParam String tag)
+    {
+        System.out.println("offset = " + offset + "; limit = " + limit + "; tag = " + tag);
+        return postService.searchPostsByTag(tag);
+    }
 }
