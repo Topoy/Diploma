@@ -42,32 +42,10 @@ public class Main implements CommandLineRunner
 
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        /*Post post = new Post();
-        User user = new User();
-        user.setName("German Frolov");
-        user.setEmail("german.frolov@gmail.com");
-        user.setId(3);
-        user.setRegTime(LocalDateTime.of(2020, Month.JUNE, 1, 10, 19));
-        post.setUser(user);
-        post.setTitle("Третий пост в блоге");
-        post.setText("А блог по-маленьку заполняется. Будет интересно посмотреть, что получится после релиза");
-        post.setTime(LocalDateTime.of(2020, Month.JULY, 10, 11, 17));
-        Tag tag = new Tag();
-        tag.setId(3);
-        tag.setName("#Pretty cool");
-        session.save(user);
-        session.save(post);
-        session.save(tag);*/
 
-        //Post post = session.get(Post.class, 1);
-        //post.setModerationStatus(StatusType.NEW);
-        //session.save(post);
-        //Tag tag = session.get(Tag.class, 3);
-        //ArrayList<Post> posts = new ArrayList<>();
-        //Post post = session.get(Post.class, 3);
-        //posts.add(post);
-        //tag.setPosts(posts);
-        //session.save(tag);
+        Post post = session.get(Post.class, 3);
+        post.setModerationStatus(StatusType.NEW);
+        session.save(post);
 
         transaction.commit();
         sessionFactory.close();
