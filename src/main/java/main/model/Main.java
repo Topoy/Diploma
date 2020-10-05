@@ -62,9 +62,9 @@ public class Main implements CommandLineRunner
         //Post post = session.get(Post.class, 1);
         //post.setModerationStatus(StatusType.NEW);
         //session.save(post);
-        //Tag tag = session.get(Tag.class, 1);
+        //Tag tag = session.get(Tag.class, 3);
         //ArrayList<Post> posts = new ArrayList<>();
-        //Post post = session.get(Post.class, 1);
+        //Post post = session.get(Post.class, 3);
         //posts.add(post);
         //tag.setPosts(posts);
         //session.save(tag);

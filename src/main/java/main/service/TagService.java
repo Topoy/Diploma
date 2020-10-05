@@ -31,7 +31,7 @@ public class TagService
     public TagResponse getTags(String query)
     {
         TagResponse tagResponse = new TagResponse();
-        if (query.isEmpty())
+        if (query.equals(""))
         {
             tagResponse.setTags(getTagList());
         }

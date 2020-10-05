@@ -179,6 +179,63 @@ public class PostService
         return moderationPosts;
     }
 
+    public PostResponse getMyPosts(String status)
+    {
+        PostResponse postResponse = new PostResponse();
+        postResponse.setCount(getAuthUserPosts(status).size());
+        postResponse.setPosts(getPostUnits(getAuthUserPosts(status)));
+        return postResponse;
+    }
+
+    private List getAuthUserPosts(String status)
+    {
+        List<Post> authUserPosts = new ArrayList<>();
+        List<Post> posts = getPostsList();
+        if (status.equals("inactive"))
+        {
+            for (Post post : posts)
+            {
+                if (post.getIsActive() == 0)
+                {
+                    authUserPosts.add(post);
+                }
+            }
+            return authUserPosts;
+        }
+        if (status.equals("pending"))
+        {
+            for (Post post : posts)
+            {
+                if (post.getIsActive() == 1 && post.getModerationStatus().equals(StatusType.NEW))
+                {
+                    authUserPosts.add(post);
+                }
+            }
+            return authUserPosts;
+        }
+        if (status.equals("declined"))
+        {
+            for (Post post : posts)
+            {
+                if (post.getIsActive() == 1 && post.getModerationStatus().equals(StatusType.DECLINED))
+                {
+                    authUserPosts.add(post);
+                }
+            }
+            return authUserPosts;
+        }
+        else {
+            for (Post post : posts)
+            {
+                if (post.getIsActive() == 1 && post.getModerationStatus().equals(StatusType.ACCEPTED))
+                {
+                    authUserPosts.add(post);
+                }
+            }
+            return authUserPosts;
+        }
+    }
+
 
 
 }
