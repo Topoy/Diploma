@@ -1,16 +1,23 @@
 package main.api.response;
 
-public class PostUnit
+import main.api.unit.CommentUnit;
+import main.api.unit.UserUnit;
+
+import java.util.List;
+
+public class PostByIdResponse
 {
     private int id;
     private long timestamp;
+    private boolean active;
     private UserUnit user;
     private String title;
-    private String announce;
+    private String text;
     private int likeCount;
     private int dislikeCount;
-    private int commentCount;
     private int viewCount;
+    private List<CommentUnit> comments;
+    private List<String> tags;
 
     public int getId() {
         return id;
@@ -26,6 +33,14 @@ public class PostUnit
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public UserUnit getUser() {
@@ -44,12 +59,12 @@ public class PostUnit
         this.title = title;
     }
 
-    public String getAnnounce() {
-        return announce;
+    public String getText() {
+        return text;
     }
 
-    public void setAnnounce(String announce) {
-        this.announce = announce;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getLikeCount() {
@@ -68,19 +83,27 @@ public class PostUnit
         this.dislikeCount = dislikeCount;
     }
 
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
-    }
-
     public int getViewCount() {
         return viewCount;
     }
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public List<CommentUnit> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentUnit> comments) {
+        this.comments = comments;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

@@ -1,14 +1,14 @@
 package main.service;
 
 import main.api.response.TagResponse;
-import main.api.response.TagUnit;
+import main.api.unit.TagUnit;
+import main.model.Post;
 import main.model.Tag;
 import main.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -62,5 +62,20 @@ public class TagService
             tagUnits.add(tagUnit);
         }
         return tagUnits;
+    }
+
+    public List<String> getTagsByPost(Post post)
+    {
+        List<Tag> tagList = getTagList();
+        List<String> tagsByPost = new ArrayList<>();
+
+        for (Tag tag : tagList)
+        {
+            if (tag.getPosts().contains(post))
+            {
+                tagsByPost.add(tag.getName());
+            }
+        }
+        return tagsByPost;
     }
 }

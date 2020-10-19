@@ -36,19 +36,19 @@ public class Main implements CommandLineRunner
     }
     public static void main(String[] args)
     {
-        StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+    /*    StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
         Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
         SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
 
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Post post = session.get(Post.class, 3);
-        post.setModerationStatus(StatusType.NEW);
+        Post post = session.get(Post.class, 2);
+        post.setModerationStatus(StatusType.ACCEPTED);
         session.save(post);
 
         transaction.commit();
-        sessionFactory.close();
+        sessionFactory.close();*/
         SpringApplication.run(Main.class, args);
     }
 }

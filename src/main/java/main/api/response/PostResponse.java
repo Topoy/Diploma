@@ -1,6 +1,8 @@
 package main.api.response;
 
 
+import main.api.unit.PostUnit;
+
 import java.util.List;
 
 public class PostResponse

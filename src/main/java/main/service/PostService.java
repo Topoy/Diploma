@@ -1,29 +1,35 @@
 package main.service;
 
+import main.api.response.AddPostResponse;
+import main.api.response.PostByIdResponse;
 import main.api.response.PostResponse;
-import main.api.response.PostUnit;
-import main.api.response.UserUnit;
+import main.api.unit.CommentUnit;
+import main.api.unit.PostUnit;
+import main.api.unit.UserUnit;
 import main.model.Post;
+import main.model.PostComment;
 import main.model.StatusType;
 import main.model.Tag;
+import main.repository.CommentRepository;
 import main.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class PostService
 {
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private TagService tagService;
@@ -236,6 +242,61 @@ public class PostService
         }
     }
 
+    public PostByIdResponse getPostById(int id)
+    {
+        PostByIdResponse postByIdResponse = new PostByIdResponse();
+        UserUnit userUnit = new UserUnit();
 
+        Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Нет элемента с id: " + id));
 
+        userUnit.setId(post.getUser().getId());
+        userUnit.setName(post.getUser().getName());
+        userUnit.setPhoto(post.getUser().getPhoto());
+
+        List<CommentUnit> comments = getCommentUnits(id, userUnit);
+
+        postByIdResponse.setId(post.getId());
+        postByIdResponse.setTimestamp(post.convertTimeToTimeStamp());
+        postByIdResponse.setActive(true);
+        postByIdResponse.setUser(userUnit);
+        postByIdResponse.setTitle(post.getTitle());
+        postByIdResponse.setText(post.getText());
+        postByIdResponse.setLikeCount(3);
+        postByIdResponse.setDislikeCount(0);
+        postByIdResponse.setViewCount(post.getViewCount());
+        postByIdResponse.setComments(comments);
+        postByIdResponse.setTags(tagService.getTagsByPost(post));
+
+        return postByIdResponse;
+    }
+
+    public List getPostComments()
+    {
+        Iterable<PostComment> postCommentsList = commentRepository.findAll();
+        List<PostComment> postComments = new ArrayList<>();
+        for (PostComment postComment : postCommentsList)
+        {
+            postComments.add(postComment);
+        }
+        return postComments;
+    }
+
+    public List getCommentUnits(int id, UserUnit user)
+    {
+        List<PostComment> postCommentList = getPostComments();
+        List<CommentUnit> commentUnits = new ArrayList<>();
+        for (PostComment postComment : postCommentList)
+        {
+            if (postComment.getPost().getId() == id)
+            {
+                CommentUnit commentUnit = new CommentUnit();
+                commentUnit.setId(postComment.getId());
+                commentUnit.setTimestamp(postComment.convertTimeToTimeStamp());
+                commentUnit.setText(postComment.getText());
+                commentUnit.setUser(user);
+                commentUnits.add(commentUnit);
+            }
+        }
+        return commentUnits;
+    }
 }

@@ -1,9 +1,10 @@
-package main.api.response;
+package main.api.unit;
 
 public class UserUnit
 {
     private int id;
     private String name;
+    private String photo;
 
     public int getId() {
         return id;
@@ -19,5 +20,13 @@ public class UserUnit
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

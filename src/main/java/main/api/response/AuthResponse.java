@@ -1,8 +1,13 @@
 package main.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import main.api.unit.AuthUserUnit;
+
 public class AuthResponse
 {
     private boolean result;
+
+    @JsonProperty("user")
     private AuthUserUnit authUserUnit;
 
     public boolean isResult() {

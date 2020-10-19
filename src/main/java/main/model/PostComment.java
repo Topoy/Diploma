@@ -2,6 +2,8 @@ package main.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "post_comments")
@@ -67,5 +69,11 @@ public class PostComment
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public long convertTimeToTimeStamp()
+    {
+        ZonedDateTime zdt = ZonedDateTime.of(this.time, ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
     }
 }

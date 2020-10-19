@@ -1,7 +1,7 @@
 package main.service;
 
 import main.api.response.AuthResponse;
-import main.api.response.AuthUserUnit;
+import main.api.unit.AuthUserUnit;
 import org.springframework.stereotype.Service;
 
 @Service

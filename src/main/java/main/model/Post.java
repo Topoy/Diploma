@@ -2,6 +2,8 @@ package main.model;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "posts")
@@ -96,5 +98,11 @@ public class Post
 
     public void setViewCount(int viewCount) {
         this.viewCount = viewCount;
+    }
+
+    public long convertTimeToTimeStamp()
+    {
+        ZonedDateTime zdt = ZonedDateTime.of(this.time, ZoneId.systemDefault());
+        return zdt.toInstant().toEpochMilli();
     }
 }
