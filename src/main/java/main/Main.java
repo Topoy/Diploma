@@ -1,5 +1,6 @@
-package main.model;
+package main;
 
+import main.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -15,10 +16,8 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
 
 @ConfigurationPropertiesScan
 @SpringBootApplication
@@ -27,7 +26,8 @@ import java.util.ArrayList;
 @EnableJpaRepositories(basePackages = "main/repository")
 public class Main implements CommandLineRunner
 {
-    @Autowired ImmutableCredentials immutableCredentials;
+    @Autowired
+    ImmutableCredentials immutableCredentials;
 
     @Override
     public void run(String... args) throws Exception
@@ -43,9 +43,16 @@ public class Main implements CommandLineRunner
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
 
-        Post post = session.get(Post.class, 2);
-        post.setModerationStatus(StatusType.ACCEPTED);
-        session.save(post);
+        PostVote postVote = new PostVote();
+        Post post = session.get(Post.class, 3);
+        User user = session.get(User.class, 2);
+        postVote.setValue((byte) 1);
+        postVote.setUser(user);
+        postVote.setId(6);
+        postVote.setPost(post);
+        postVote.setTime(LocalDateTime.of(2020, Month.NOVEMBER, 5, 16, 33));
+
+        session.save(postVote);
 
         transaction.commit();
         sessionFactory.close();*/

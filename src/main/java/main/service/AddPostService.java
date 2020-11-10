@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 @Service
 public class AddPostService
@@ -27,9 +30,9 @@ public class AddPostService
         else {
             addPostResponse.setResult(true);
             Post post = new Post();
-            //User user = ;
             Timestamp ts = new Timestamp(addPostParameterUnit.getTimestamp());
-            post.setTime(ts.toLocalDateTime());
+            post.setTime(LocalDateTime.ofInstant(Instant.ofEpochSecond(addPostParameterUnit.getTimestamp()),
+                        TimeZone.getTimeZone("Europe/Moscow").toZoneId()));
             post.setIsActive(addPostParameterUnit.getActive());
             post.setTitle(addPostParameterUnit.getTitle());
             post.setText(addPostParameterUnit.getText());

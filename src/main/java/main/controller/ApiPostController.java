@@ -11,8 +11,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
 import main.service.PostService;
 
-import java.util.ArrayList;
-
 @ComponentScan({"main.service"})
 @RestController
 @RequestMapping("/api/post")
@@ -28,7 +26,7 @@ public class ApiPostController {
                                  @RequestParam(required = false, defaultValue = "10") int limit,
                                  @RequestParam(required = false, defaultValue = "recent") String mode) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; mode = " + mode);
-        return postService.getPosts();
+        return postService.getPosts(offset, limit, mode);
     }
 
     @GetMapping(value = "/search")
@@ -36,7 +34,7 @@ public class ApiPostController {
                                    @RequestParam(required = false, defaultValue = "10") int limit,
                                    @RequestParam String query) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; query = " + query);
-        return postService.searchPost(query);
+        return postService.searchPost(offset, limit, query);
     }
 
     @GetMapping(value = "/byDate")
@@ -44,7 +42,7 @@ public class ApiPostController {
                                          @RequestParam(required = false, defaultValue = "10") int limit,
                                          @RequestParam String date) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; date = " + date);
-        return postService.searchPostByDate(date);
+        return postService.searchPostByDate(offset, limit, date);
     }
 
     @GetMapping(value = "/byTag")
@@ -52,7 +50,7 @@ public class ApiPostController {
                                         @RequestParam(required = false, defaultValue = "10") int limit,
                                         @RequestParam String tag) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; tag = " + tag);
-        return postService.searchPostsByTag(tag);
+        return postService.searchPostsByTag(offset, limit, tag);
     }
 
     @GetMapping(value = "/moderation")
@@ -60,7 +58,7 @@ public class ApiPostController {
                                            @RequestParam(required = false, defaultValue = "10") int limit,
                                            @RequestParam StatusType status) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; status = " + status);
-        return postService.getModerationPosts(status);
+        return postService.getModerationPosts(offset, limit, status);
     }
 
     @GetMapping(value = "/my")
@@ -68,7 +66,7 @@ public class ApiPostController {
                                    @RequestParam(required = false, defaultValue = "10") int limit,
                                    @RequestParam String status) {
         System.out.println("offset = " + offset + "; limit = " + limit + "; status = " + status);
-        return postService.getMyPosts(status);
+        return postService.getMyPosts(offset, limit, status);
     }
 
     @GetMapping(value = "/{id}")
@@ -78,8 +76,7 @@ public class ApiPostController {
 
     @PostMapping(value = "")
     public AddPostResponse addPost(@RequestBody AddPostParameterUnit postParameterUnit) {
-        //addPostService.savePostParameters(timestamp, active, title, text, tags);
         return addPostService.addPost(postParameterUnit);
-        //return "Hello, guys!";
     }
+
 }
