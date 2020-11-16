@@ -1,0 +1,1 @@
+insert into posts (id, text) values ('1', 'This is first post in the blog');

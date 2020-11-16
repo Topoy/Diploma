@@ -1,18 +1,3 @@
-alter table post_comments drop foreign key FKaawaqxjs3br8dw5v90w7uu514;
-alter table post_comments drop foreign key FKsnxoecngu89u3fh4wdrgf0f2g;
-alter table post_votes drop foreign key FK9jh5u17tmu1g7xnlxa77ilo3u;
-alter table post_votes drop foreign key FK9q09ho9p8fmo6rcysnci8rocc;
-alter table posts drop foreign key FK5lidm6cqbc7u4xhqpxm898qme;
-alter table tag2post drop foreign key FKpjoedhh4h917xf25el3odq20i;
-alter table tag2post drop foreign key FKjou6suf2w810t2u3l96uasw3r;
-drop table if exists captcha_codes;
-drop table if exists global_settings;
-drop table if exists post_comments;
-drop table if exists post_votes;
-drop table if exists posts;
-drop table if exists tag2post;
-drop table if exists tags;
-drop table if exists users;
 create table captcha_codes (id integer not null auto_increment, code tinyint not null, secret_code tinyint, time datetime(6), primary key (id));
 create table global_settings (id integer not null auto_increment, code varchar(255), name varchar(255), value varchar(255), primary key (id));
 create table post_comments (id integer not null auto_increment, parent_id integer, text varchar(255), time datetime(6), post_id integer, user_id integer, primary key (id));

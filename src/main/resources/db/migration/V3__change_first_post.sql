@@ -1,0 +1,1 @@
+update posts set is_active = '1' where id = '1';
