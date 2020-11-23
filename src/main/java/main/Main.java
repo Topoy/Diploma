@@ -1,13 +1,6 @@
 package main;
 
 import main.model.*;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.Metadata;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,9 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import java.time.LocalDateTime;
-import java.time.Month;
 
 @ConfigurationPropertiesScan
 @SpringBootApplication
@@ -36,26 +26,6 @@ public class Main implements CommandLineRunner
     }
     public static void main(String[] args)
     {
-    /*    StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
-        Metadata metadata = new MetadataSources(registry).getMetadataBuilder().build();
-        SessionFactory sessionFactory = metadata.getSessionFactoryBuilder().build();
-
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
-        PostVote postVote = new PostVote();
-        Post post = session.get(Post.class, 3);
-        User user = session.get(User.class, 2);
-        postVote.setValue((byte) 1);
-        postVote.setUser(user);
-        postVote.setId(6);
-        postVote.setPost(post);
-        postVote.setTime(LocalDateTime.of(2020, Month.NOVEMBER, 5, 16, 33));
-
-        session.save(postVote);
-
-        transaction.commit();
-        sessionFactory.close();*/
         SpringApplication.run(Main.class, args);
     }
 }
