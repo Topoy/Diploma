@@ -13,7 +13,7 @@ public class PostComment
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "parent_id")
-    private int parentId;
+    private Integer parentId;
     //@Column(name = "post_id")
     @ManyToOne(cascade = CascadeType.ALL)
     private Post post;
@@ -35,7 +35,7 @@ public class PostComment
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 
@@ -74,6 +74,6 @@ public class PostComment
     public long convertTimeToTimeStamp()
     {
         ZonedDateTime zdt = ZonedDateTime.of(this.time, ZoneId.systemDefault());
-        return zdt.toInstant().toEpochMilli();
+        return zdt.toInstant().toEpochMilli()/1000;
     }
 }

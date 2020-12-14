@@ -5,12 +5,10 @@ import main.api.response.PostResponse;
 import main.api.unit.CommentUnit;
 import main.api.unit.PostUnit;
 import main.api.unit.UserUnit;
-import main.model.Post;
-import main.model.PostComment;
-import main.model.StatusType;
-import main.model.Tag;
+import main.model.*;
 import main.repository.CommentRepository;
 import main.repository.PostRepository;
+import main.repository.PostVotesRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,12 +27,17 @@ public class PostService
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final TagService tagService;
+    private final PostVoteService postVoteService;
+    private final CommentService commentService;
 
-    public PostService(PostRepository postRepository, CommentRepository commentRepository, TagService tagService)
+    public PostService(PostRepository postRepository, CommentRepository commentRepository, TagService tagService,
+                       PostVoteService postVoteService, CommentService commentService)
     {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.tagService = tagService;
+        this.postVoteService = postVoteService;
+        this.commentService = commentService;
     }
 
 
@@ -86,6 +89,7 @@ public class PostService
     private List<PostUnit> getPostUnits(List<Post> specialPosts)
     {
         List<PostUnit> postUnits = new ArrayList<>();
+        int maxAnnounceLength = 50;
         for (Post post : specialPosts)
         {
             PostUnit postUnit = new PostUnit();
@@ -96,11 +100,11 @@ public class PostService
             postUnit.setTimestamp(post.getTime().atZone(ZoneId.of("Europe/Moscow")).toInstant().toEpochMilli()/1000);
             postUnit.setUser(userUnit);
             postUnit.setTitle(post.getTitle());
-            postUnit.setAnnounce(post.getText().substring(0, 50) + "...");
-            postUnit.setLikeCount(1);
-            postUnit.setDislikeCount(1);
-            postUnit.setCommentCount(2);
-            postUnit.setViewCount(2);
+            postUnit.setAnnounce(post.getText().substring(0, Math.min(post.getText().length(), maxAnnounceLength)) + "...");
+            postUnit.setLikeCount(postVoteService.getVotesCount(post, "like"));
+            postUnit.setDislikeCount(postVoteService.getVotesCount(post, "dislike"));
+            postUnit.setCommentCount(commentService.getCommentsCount(post));
+            postUnit.setViewCount(post.getViewCount());
             postUnits.add(postUnit);
         }
         return postUnits;
@@ -109,15 +113,17 @@ public class PostService
     public PostResponse searchPost(int offset, int limit, String query)
     {
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(getFoundPosts(offset, limit, query).size());
-        postResponse.setPosts(getPostUnits(getFoundPosts(offset, limit, query)));
+        List<Post> foundPosts = getFoundPosts(offset, limit, query);
+        postResponse.setCount(foundPosts.size());
+        postResponse.setPosts(getPostUnits(foundPosts));
         return postResponse;
     }
 
     private List<Post> getFoundPosts(int offset, int limit, String query)
     {
         List<Post> foundPosts = new ArrayList<>();
-        List<Post> posts = getPostsList(offset, limit);
+        //List<Post> posts = getPostsList(offset, limit);
+        List<Post> posts = postRepository.getAllPosts();
         for (Post post : posts)
         {
             if ((post.getTitle().contains(query)) || (post.getUser().getName().contains(query)) || (post.getText().contains(query)))
@@ -131,8 +137,9 @@ public class PostService
     public PostResponse searchPostByDate(int offset, int limit, String date)
     {
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(getFoundPostsByDate(offset, limit, date).size());
-        postResponse.setPosts(getPostUnits(getFoundPostsByDate(offset, limit, date)));
+        List<Post> foundPostsByDate = getFoundPostsByDate(offset, limit, date);
+        postResponse.setCount(foundPostsByDate.size());
+        postResponse.setPosts(getPostUnits(foundPostsByDate));
         return postResponse;
     }
 
@@ -180,16 +187,18 @@ public class PostService
     public PostResponse searchPostsByTag(int offset, int limit, String tag)
     {
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(getPostsByTag(tag).size());
-        postResponse.setPosts(getPostUnits(getPostsByTag(tag)));
+        List<Post> postsByTag = getPostsByTag(tag);
+        postResponse.setCount(postsByTag.size());
+        postResponse.setPosts(getPostUnits(postsByTag));
         return postResponse;
     }
 
     public PostResponse getModerationPosts(int offset, int limit, StatusType status)
     {
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(getPostsForModeration(offset, limit, status).size());
-        postResponse.setPosts(getPostUnits(getPostsForModeration(offset, limit, status)));
+        List<Post> moderationPosts = getPostsForModeration(offset, limit, status);
+        postResponse.setCount(moderationPosts.size());
+        postResponse.setPosts(getPostUnits(moderationPosts));
         return postResponse;
     }
 
@@ -218,8 +227,9 @@ public class PostService
     public PostResponse getMyPosts(int offset, int limit, String status)
     {
         PostResponse postResponse = new PostResponse();
-        postResponse.setCount(getAuthUserPosts(offset, limit, status).size());
-        postResponse.setPosts(getPostUnits(getAuthUserPosts(offset, limit, status)));
+        List<Post> authUserPosts = getAuthUserPosts(offset, limit, status);
+        postResponse.setCount(authUserPosts.size());
+        postResponse.setPosts(getPostUnits(authUserPosts));
         return postResponse;
     }
 
@@ -291,8 +301,8 @@ public class PostService
         postByIdResponse.setUser(userUnit);
         postByIdResponse.setTitle(post.getTitle());
         postByIdResponse.setText(post.getText());
-        postByIdResponse.setLikeCount(3);
-        postByIdResponse.setDislikeCount(0);
+        postByIdResponse.setLikeCount(postVoteService.getVotesCount(post, "like"));
+        postByIdResponse.setDislikeCount(postVoteService.getVotesCount(post, "dislike"));
         postByIdResponse.setViewCount(post.getViewCount());
         postByIdResponse.setComments(comments);
         postByIdResponse.setTags(tagService.getTagsByPost(post));

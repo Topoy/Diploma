@@ -103,6 +103,6 @@ public class Post
     public long convertTimeToTimeStamp()
     {
         ZonedDateTime zdt = ZonedDateTime.of(this.time, ZoneId.systemDefault());
-        return zdt.toInstant().toEpochMilli();
+        return zdt.toInstant().toEpochMilli()/1000;
     }
 }

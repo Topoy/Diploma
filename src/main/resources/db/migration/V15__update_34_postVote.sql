@@ -1,0 +1,1 @@
+update post_votes set user_id = (select users.id from users where id = 3) where id = 34;

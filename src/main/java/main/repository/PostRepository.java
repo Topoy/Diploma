@@ -1,7 +1,6 @@
 package main.repository;
 
 import main.model.Post;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +28,8 @@ public interface PostRepository extends JpaRepository<Post, Integer>
     @Query(value = "SELECT * FROM posts p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED' AND " +
             "p.`time` < NOW() ORDER BY `time`", nativeQuery = true)
     List<Post> getEarlyPosts(Pageable pageable);
+
+    @Query(value = "SELECT * FROM posts p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED'", nativeQuery = true)
+    List<Post> getAllPosts();
+
 }

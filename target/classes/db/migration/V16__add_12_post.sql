@@ -1,0 +1,2 @@
+insert into posts (id, is_active, moderation_status, moderator_id, text, `time`, title, view_count, user_id)
+values ('12', '1', 'ACCEPTED', '10', 'Еще один пост. Просто набор букв. Ничего такого', '2020-12-14 12:45:03', '12 пост', '5', (select users.id from users where id = 10));

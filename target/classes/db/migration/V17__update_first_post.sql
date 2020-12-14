@@ -1,0 +1,1 @@
+update posts set moderation_status = 'ACCEPTED' where id = 1;
