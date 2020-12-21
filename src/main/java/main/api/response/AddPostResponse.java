@@ -7,8 +7,6 @@ public class AddPostResponse
 {
     boolean result;
     LinkedHashMap<String, String> errors = new LinkedHashMap<>();
-    //String title;
-    //String text;
 
     public boolean getResult()
     {

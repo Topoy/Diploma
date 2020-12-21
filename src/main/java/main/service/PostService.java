@@ -285,20 +285,20 @@ public class PostService
     public PostByIdResponse getPostById(int id)
     {
         PostByIdResponse postByIdResponse = new PostByIdResponse();
-        UserUnit userUnit = new UserUnit();
+        UserUnit postAuthor = new UserUnit();
 
         Post post = postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Нет элемента с id: " + id));
 
-        userUnit.setId(post.getUser().getId());
-        userUnit.setName(post.getUser().getName());
-        userUnit.setPhoto(post.getUser().getPhoto());
+        postAuthor.setId(post.getUser().getId());
+        postAuthor.setName(post.getUser().getName());
+        postAuthor.setPhoto(post.getUser().getPhoto());
 
-        List<CommentUnit> comments = getCommentUnits(id, userUnit);
+        List<CommentUnit> comments = getCommentUnits(id);
 
         postByIdResponse.setId(post.getId());
         postByIdResponse.setTimestamp(post.convertTimeToTimeStamp());
         postByIdResponse.setActive(true);
-        postByIdResponse.setUser(userUnit);
+        postByIdResponse.setUser(postAuthor);
         postByIdResponse.setTitle(post.getTitle());
         postByIdResponse.setText(post.getText());
         postByIdResponse.setLikeCount(postVoteService.getVotesCount(post, "like"));
@@ -321,7 +321,7 @@ public class PostService
         return postComments;
     }
 
-    public List<CommentUnit> getCommentUnits(int id, UserUnit user)
+    public List<CommentUnit> getCommentUnits(int id)
     {
         List<PostComment> postCommentList = getPostComments();
         List<CommentUnit> commentUnits = new ArrayList<>();
@@ -330,10 +330,16 @@ public class PostService
             if (postComment.getPost().getId() == id)
             {
                 CommentUnit commentUnit = new CommentUnit();
+                UserUnit commentAuthor = new UserUnit();
+
+                commentAuthor.setName(postComment.getUser().getName());
+                commentAuthor.setId(postComment.getUser().getId());
+                commentAuthor.setPhoto(postComment.getUser().getPhoto());
+
                 commentUnit.setId(postComment.getId());
                 commentUnit.setTimestamp(postComment.convertTimeToTimeStamp());
                 commentUnit.setText(postComment.getText());
-                commentUnit.setUser(user);
+                commentUnit.setUser(commentAuthor);
                 commentUnits.add(commentUnit);
             }
         }

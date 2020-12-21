@@ -1,14 +1,5 @@
 package main.api.unit;
 
-import main.model.Post;
-import main.model.PostVote;
-import main.repository.PostVotesRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class PostUnit
 {
     private int id;
@@ -20,18 +11,6 @@ public class PostUnit
     private int dislikeCount;
     private int commentCount;
     private int viewCount;
-
-  /*  private final PostVotesRepository postVotesRepository;
-
-    public PostUnit(PostVotesRepository postVotesRepository)
-    {
-        this.postVotesRepository = postVotesRepository;
-    }*/
-
-    @Autowired
-    PostVotesRepository postVotesRepository;
-
-
 
     public int getId() {
         return id;
@@ -77,9 +56,7 @@ public class PostUnit
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
+    public void setLikeCount(int likeCount) { this.likeCount = likeCount; }
 
     public int getDislikeCount() {
         return dislikeCount;

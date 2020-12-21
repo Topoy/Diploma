@@ -37,7 +37,7 @@ public class AddPostService
             post.setTitle(addPostParameterUnit.getTitle());
             post.setText(addPostParameterUnit.getText());
             post.setModerationStatus(StatusType.NEW);
-            //post.setUser();
+            //post.setUser(addPostParameterUnit.get);
 
             postRepository.save(post);
         }

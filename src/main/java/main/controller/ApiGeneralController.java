@@ -1,14 +1,8 @@
 package main.controller;
 
-import main.api.response.CalendarResponse;
-import main.api.response.ImageResponse;
-import main.api.response.SettingsResponse;
-import main.api.response.TagResponse;
+import main.api.response.*;
 import main.model.ImmutableCredentials;
-import main.service.CalendarService;
-import main.service.ImageService;
-import main.service.SettingsService;
-import main.service.TagService;
+import main.service.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,15 +17,17 @@ public class ApiGeneralController
     private final TagService tagService;
     private final CalendarService calendarService;
     private final ImageService imageService;
+    private final StatisticsService statisticsService;
 
     public ApiGeneralController(ImmutableCredentials immutableCredentials, SettingsService settingsService, TagService tagService,
-                                CalendarService calendarService, ImageService imageService)
+                                CalendarService calendarService, ImageService imageService, StatisticsService statisticsService)
     {
         this.settingsService = settingsService;
         this.tagService = tagService;
         this.calendarService = calendarService;
         this.imageService = imageService;
         this.immutableCredentials = immutableCredentials;
+        this.statisticsService = statisticsService;
     }
 
     @GetMapping("/api/init")
@@ -61,6 +57,12 @@ public class ApiGeneralController
     public ImageResponse uploadImage(@RequestParam("image") MultipartFile file)
     {
         return imageService.uploadImage();
+    }
+
+    @GetMapping("/api/statistics/all")
+    public StatisticsResponse getAllStatistics()
+    {
+        return statisticsService.getAllStatistics();
     }
 
 }

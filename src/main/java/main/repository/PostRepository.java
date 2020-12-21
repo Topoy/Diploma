@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -31,5 +32,11 @@ public interface PostRepository extends JpaRepository<Post, Integer>
 
     @Query(value = "SELECT * FROM posts p WHERE p.is_active = 1 AND p.moderation_status = 'ACCEPTED'", nativeQuery = true)
     List<Post> getAllPosts();
+
+    @Query(value = "SELECT SUM(view_count) FROM posts", nativeQuery = true)
+    Integer getAllViews();
+
+    @Query(value = "SELECT MIN(`time`) from posts", nativeQuery = true)
+    LocalDateTime getFirstPostTime();
 
 }

@@ -11,9 +11,9 @@ public class CaptchaCode
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime time;
-    private byte code;
+    private String code;
     @Column(name = "secret_code")
-    private byte secretCode;
+    private String secretCode;
 
     public int getId() {
         return id;
@@ -31,19 +31,19 @@ public class CaptchaCode
         this.time = time;
     }
 
-    public byte getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(byte code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
-    public byte getSecretCode() {
+    public String getSecretCode() {
         return secretCode;
     }
 
-    public void setSecretCode(byte secretCode) {
+    public void setSecretCode(String secretCode) {
         this.secretCode = secretCode;
     }
 
