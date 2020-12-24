@@ -8,9 +8,9 @@ public class RegisterParametersUnit
     private String email;
     private String password;
     private String name;
-    private String captcha;
     @JsonProperty("captcha_secret")
     private String captchaSecret;
+    private String captcha;
 
     public String getEmail() {
         return email;

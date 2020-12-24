@@ -9,6 +9,7 @@ import main.api.unit.AuthUserUnit;
 import main.api.unit.LoginParametersUnit;
 import main.api.unit.RegisterParametersUnit;
 import main.model.CaptchaCode;
+import main.model.User;
 import main.repository.CaptchaRepository;
 import main.repository.PostRepository;
 import main.repository.UserRepository;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -82,7 +84,7 @@ public class AuthService
             registerResponse.setErrors(parameters.getEmail(), parameters.getName(),
                                 "Пароль слишком короткий", parameters.getCaptcha());
         }
-        else if (!parameters.getCaptcha().equals(parameters.getCaptchaSecret()))
+        else if (!getCaptchaTextBySecretCode(parameters.getCaptchaSecret()).equals(parameters.getCaptcha()))
         {
             registerResponse.setResult(false);
             registerResponse.setErrors(parameters.getEmail(), parameters.getName(),
@@ -90,6 +92,13 @@ public class AuthService
         }
         else
         {
+            User user = new User();
+            user.setName(parameters.getName());
+            user.setEmail(parameters.getEmail());
+            user.setIsModerator((byte) 0);
+            user.setPassword(parameters.getPassword());
+            user.setRegTime(LocalDateTime.now());
+            userRepository.save(user);
             registerResponse.setResult(true);
         }
         return registerResponse;
@@ -141,5 +150,19 @@ public class AuthService
             sb.append(tmp);
         }
         return sb.toString();
+    }
+
+    public String getCaptchaTextBySecretCode(String secretCode)
+    {
+        List<CaptchaCode> captchaCodeList = captchaRepository.findAll();
+        String captchaText = "";
+        for (CaptchaCode captchaCode : captchaCodeList)
+        {
+            if (captchaCode.getSecretCode().equals(secretCode))
+            {
+                captchaText = captchaCode.getCode();
+            }
+        }
+        return captchaText;
     }
 }
