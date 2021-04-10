@@ -1,12 +1,13 @@
 package main.api.response;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ImageResponse
 {
     private String imagePath;
     private boolean result;
-    private HashMap<String, String> errors = new HashMap<>();
+    private LinkedHashMap<String, String> errors = new LinkedHashMap<>();
 
     public String getImagePath() {
         return imagePath;
@@ -28,7 +29,8 @@ public class ImageResponse
         return errors;
     }
 
-    public void setErrors(HashMap<String, String> errors) {
-        this.errors = errors;
+    public void setErrors(String text)
+    {
+        this.errors.put("image", text);
     }
 }

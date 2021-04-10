@@ -1,14 +1,16 @@
 package main.controller;
 
 import main.api.response.*;
+import main.api.unit.CommentParameterUnit;
 import main.model.ImmutableCredentials;
 import main.service.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
+
+@ComponentScan({"main.service"})
 @RestController
 public class ApiGeneralController
 {
@@ -18,9 +20,13 @@ public class ApiGeneralController
     private final CalendarService calendarService;
     private final ImageService imageService;
     private final StatisticsService statisticsService;
+    private final CommentService commentService;
+    private final EditProfileService editProfileService;
+
 
     public ApiGeneralController(ImmutableCredentials immutableCredentials, SettingsService settingsService, TagService tagService,
-                                CalendarService calendarService, ImageService imageService, StatisticsService statisticsService)
+                                CalendarService calendarService, ImageService imageService, StatisticsService statisticsService,
+                                CommentService commentService, EditProfileService editProfileService)
     {
         this.settingsService = settingsService;
         this.tagService = tagService;
@@ -28,6 +34,8 @@ public class ApiGeneralController
         this.imageService = imageService;
         this.immutableCredentials = immutableCredentials;
         this.statisticsService = statisticsService;
+        this.commentService = commentService;
+        this.editProfileService = editProfileService;
     }
 
     @GetMapping("/api/init")
@@ -54,9 +62,9 @@ public class ApiGeneralController
     }
 
     @PostMapping("/api/image")
-    public ImageResponse uploadImage(@RequestParam("image") MultipartFile file)
+    public ImageResponse uploadImage(@RequestParam("image") MultipartFile image)
     {
-        return imageService.uploadImage();
+        return imageService.uploadImage(image);
     }
 
     @GetMapping("/api/statistics/all")
@@ -64,5 +72,28 @@ public class ApiGeneralController
     {
         return statisticsService.getAllStatistics();
     }
+
+    @GetMapping("/api/statistics/my")
+    public StatisticsResponse getMyStatistics(Principal principal)
+    { return statisticsService.getMyStatistics(principal); }
+
+    @PostMapping("/api/comment")
+    public CommentResponse setComment(@RequestBody CommentParameterUnit commentParameterUnit, Principal principal)
+    {
+        return commentService.setComment(commentParameterUnit, principal);
+    }
+
+    @PostMapping(value = "/api/profile/my")
+    public ProfileResponse editMyProfileWithPhoto(
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "email") String email,
+            @RequestParam(value = "password", required = false) String password,
+            @RequestParam(value = "removePhoto") int removePhoto,
+            @RequestParam(value = "photo") MultipartFile photo, Principal principal)
+    {
+        return editProfileService.editMyProfileWithPhoto(name, email, password, removePhoto, photo, principal);
+    }
+
+
 
 }

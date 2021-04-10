@@ -39,4 +39,5 @@ public interface PostRepository extends JpaRepository<Post, Integer>
     @Query(value = "SELECT MIN(`time`) from posts", nativeQuery = true)
     LocalDateTime getFirstPostTime();
 
+
 }

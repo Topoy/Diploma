@@ -8,6 +8,7 @@ import main.model.StatusType;
 import main.service.AddPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import main.service.PostService;
 
@@ -22,6 +23,7 @@ public class ApiPostController {
     AddPostService addPostService;
 
     @GetMapping(value = "")
+    @PreAuthorize("hasAuthority('user:write')")
     public PostResponse getPosts(@RequestParam(required = false, defaultValue = "0") int offset,
                                  @RequestParam(required = false, defaultValue = "10") int limit,
                                  @RequestParam(required = false, defaultValue = "recent") String mode) {
@@ -30,6 +32,7 @@ public class ApiPostController {
     }
 
     @GetMapping(value = "/search")
+    @PreAuthorize("hasAuthority('user:moderate')")
     public PostResponse searchPost(@RequestParam(required = false, defaultValue = "0") int offset,
                                    @RequestParam(required = false, defaultValue = "10") int limit,
                                    @RequestParam String query) {
@@ -77,6 +80,11 @@ public class ApiPostController {
     @PostMapping(value = "")
     public AddPostResponse addPost(@RequestBody AddPostParameterUnit postParameterUnit) {
         return addPostService.addPost(postParameterUnit);
+    }
+
+    @PutMapping(value = "/{id}")
+    public AddPostResponse editPost(@RequestBody AddPostParameterUnit postParameterUnit, @PathVariable("id") int id) {
+        return addPostService.editPost(postParameterUnit, id);
     }
 
 }

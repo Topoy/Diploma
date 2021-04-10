@@ -1,0 +1,1 @@
+update posts set user_id = (select users.id from users where id = 14) where id = 13;
